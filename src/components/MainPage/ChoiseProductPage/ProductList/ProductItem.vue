@@ -1,6 +1,6 @@
 <template>
     <li class="catalog__item">
-      <a class="catalog__pic" href="#">
+      <a class="catalog__pic" href="#" @click="goToPage('product', {id: product.id})">
         <img
           :src="product.img"
           srcset="img/radio@2x.jpg 2x"
@@ -14,7 +14,7 @@
         </a>
       </h3>
 
-      <span class="catalog__price"> {{ product.price }} ₽ </span>
+      <span class="catalog__price"> {{ product.price | formatNumbers}} ₽ </span>
 
       <ul class="colors colors--black">
         <li class="colors__item">
@@ -56,12 +56,21 @@
     </li>
 </template>
 <script>
+import goToPage from '@/utils/goToPage';
+import formatNumbers from '@/utils/formatNumber';
+
 export default {
   props: ['product'],
   data() {
     return {
       color: '#73B6EA',
     };
+  },
+  methods: {
+    goToPage,
+  },
+  filters: {
+    formatNumbers,
   },
 };
 </script>
