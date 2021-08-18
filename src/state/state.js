@@ -146,6 +146,9 @@ const state = {
       title: 'Наушники',
     },
   ],
+  colorList: [
+    '#73B6EA', '#ffbe15', '#939393', '#8BE000', '#ff6b00', '#fff', '#222',
+  ],
 };
 state.products = state.products.map((el) => ({
   id: generateKey(),

@@ -53,180 +53,16 @@
       <fieldset class='form__block'>
         <legend class='form__legend'>Цвет</legend>
         <ul class='colors'>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                value='#73B6EA'
-                v-model="currentColor"
-              />
-              <span class='colors__value' style='background-color: #73b6ea'>
-              </span>
-            </label>
-          </li>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                value='#FFBE15'
-                v-model="currentColor"
-              />
-              <span class='colors__value' style='background-color: #ffbe15'>
-              </span>
-            </label>
-          </li>
-          <li class='colors__item'>
+          <li class='colors__item' v-for="(color, i) of colorList" :key="i">
             <label class='colors__label'>
               <input
                 class='colors__radio sr-only'
                 type='radio'
                 name='color'
                 v-model="currentColor"
-                value='#939393' />
-              <span class='colors__value' style='background-color: #939393'>
-              </span
+                :value="color" />
+              <span class='colors__value' :style="`background-color: ${color}`"> </span
             ></label>
-          </li>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                v-model="currentColor"
-                value='#8BE000' />
-              <span class='colors__value' style='background-color: #8be000'>
-              </span
-            ></label>
-          </li>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                v-model="currentColor"
-                value='#FF6B00' />
-              <span class='colors__value' style='background-color: #ff6b00'>
-              </span
-            ></label>
-          </li>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                v-model="currentColor"
-                value='#FFF' />
-              <span class='colors__value' style='background-color: #fff'> </span
-            ></label>
-          </li>
-          <li class='colors__item'>
-            <label class='colors__label'>
-              <input
-                class='colors__radio sr-only'
-                type='radio'
-                name='color'
-                v-model="currentColor"
-                value='#000' />
-              <span class='colors__value' style='background-color: #000'> </span
-            ></label>
-          </li>
-        </ul>
-      </fieldset>
-
-      <fieldset class='form__block'>
-        <legend class='form__legend'>Объемб в ГБ</legend>
-        <ul class='check-list'>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='8'
-                checked=''
-              />
-              <span class='check-list__desc'>
-                8
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='16'
-              />
-              <span class='check-list__desc'>
-                16
-                <span>(461)</span>
-              </span>
-            </label>
-          </li>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='32'
-              />
-              <span class='check-list__desc'>
-                32
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='64'
-              />
-              <span class='check-list__desc'>
-                64
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='128'
-              />
-              <span class='check-list__desc'>
-                128
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class='check-list__item'>
-            <label class='check-list__label'>
-              <input
-                class='check-list__check sr-only'
-                type='checkbox'
-                name='volume'
-                value='264'
-              />
-              <span class='check-list__desc'>
-                264
-                <span>(313)</span>
-              </span>
-            </label>
           </li>
         </ul>
       </fieldset>
@@ -241,6 +77,8 @@
   </aside>
 </template>
 <script>
+import state from '@/state/state';
+
 export default {
   props: ['priceFrom', 'priceTo', 'categoryId', 'Allcategory', 'color'],
   data() {
@@ -277,6 +115,11 @@ export default {
       this.$emit('update:priceTo', 0);
       this.$emit('update:categoryId', 0);
       this.$emit('update:color', 0);
+    },
+  },
+  computed: {
+    colorList() {
+      return state.colorList;
     },
   },
 };
