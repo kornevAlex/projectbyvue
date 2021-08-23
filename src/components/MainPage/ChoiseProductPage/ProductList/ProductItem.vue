@@ -1,11 +1,12 @@
 <template>
     <li class="catalog__item">
-      <a class="catalog__pic" href="#" @click="goToPage('product', {id: product.id})">
+      <router-link class="catalog__pic"
+      :to="{name: 'product', params: {id: product.id, categoryId: product.categoryId }}" >
         <img
           :src="product.img"
           alt="Название товара"
         />
-      </a>
+      </router-link>
 
       <h3 class="catalog__title">
         <a href="#">
@@ -55,7 +56,6 @@
     </li>
 </template>
 <script>
-import goToPage from '@/utils/goToPage';
 import formatNumbers from '@/utils/formatNumber';
 
 export default {
@@ -64,9 +64,6 @@ export default {
     return {
       color: '#73B6EA',
     };
-  },
-  methods: {
-    goToPage,
   },
   filters: {
     formatNumbers,

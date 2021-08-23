@@ -77,7 +77,7 @@
   </aside>
 </template>
 <script>
-import state from '@/state/state';
+import { mapGetters } from 'vuex';
 
 export default {
   props: ['priceFrom', 'priceTo', 'categoryId', 'Allcategory', 'color'],
@@ -118,9 +118,9 @@ export default {
     },
   },
   computed: {
-    colorList() {
-      return state.colorList;
-    },
+    ...mapGetters({
+      colorList: 'getColorList',
+    }),
   },
 };
 </script>

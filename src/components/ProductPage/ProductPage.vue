@@ -3,12 +3,12 @@
     <div class='content__top'>
       <ul class='breadcrumbs'>
         <li class='breadcrumbs__item'>
-          <a class='breadcrumbs__link' href='index.html'> Каталог </a>
+          <router-link class='breadcrumbs__link' :to="{name: 'main'}"> Каталог </router-link>
         </li>
         <li class='breadcrumbs__item'>
-          <a class='breadcrumbs__link' href='#' @click.prevent="goToPage('main')">
+          <router-link class='breadcrumbs__link' :to="{name: 'main'}">
             {{category.title}}
-            </a>
+            </router-link>
         </li>
         <li class='breadcrumbs__item'>
           <a class='breadcrumbs__link'> {{product.title}} </a>
@@ -22,7 +22,7 @@
           <img
             width='570'
             height='570'
-            :src='product.img'
+            :src="productImage"
             :alt='product.title'
           />
         </div>
@@ -32,7 +32,7 @@
         <span class='item__code'>Артикул: {{product.id}}</span>
         <h2 class='item__title'>{{product.title}}</h2>
         <div class='item__form'>
-          <form class='form' action='#' method='POST'>
+          <form class='form' action='#' method='POST' @submit.prevent="pushProduct">
             <b class='item__price'> {{product.price | formatNumbers}} ₽ </b>
 
             <fieldset class='form__block'>
@@ -87,23 +87,8 @@
             </fieldset>
 
             <div class='item__row'>
-              <div class='form__counter'>
-                <button type='button' aria-label='Убрать один товар' @click="decr">
-                  <svg width='12' height='12' fill='currentColor'>
-                    <use xlink:href='#icon-minus'></use>
-                  </svg>
-                </button>
-
-                <input type='text' name='count' readonly v-model="productBasket"/>
-
-                <button type='button' aria-label='Добавить один товар' @click="inc">
-                  <svg width='12' height='12' fill='currentColor'>
-                    <use xlink:href='#icon-plus'></use>
-                  </svg>
-                </button>
-              </div>
-
-              <button class='button button--primery' type='submit'>
+              <FormCounter :productBasket.sync="productBasket"/>
+              <button class='button button--primery'>
                 В корзину
               </button>
             </div>
@@ -138,35 +123,39 @@
 </template>
 
 <script>
-import state from '@/state/state';
-import goToPage from '@/utils/goToPage';
+import { mapGetters, mapMutations } from 'vuex';
 import formatNumbers from '@/utils/formatNumber';
+import FormCounter from '../Kit/FormCounter.vue';
 
 export default {
-  props: ['pageProps'],
+  components: {
+    FormCounter,
+  },
   data() {
     return {
       productBasket: 1,
     };
   },
   computed: {
+    ...mapGetters(['getProductList', 'getCategory']),
     product() {
-      return state.products.find((product) => product.id === this.pageProps.id);
+      return this.getProductList.find((product) => product.id === +this.$route.params.id);
     },
     category() {
-      return state.categories.find((cat) => cat.id === this.product.categoryId);
+      return this.getCategory.find((cat) => cat.id === this.product.categoryId);
+    },
+    productImage() {
+      return `../${this.product.img}`;
     },
   },
   methods: {
-    goToPage,
-    inc() {
-      this.productBasket += 1;
+    pushProduct() {
+      this.addProduct({
+        id: this.product.id,
+        count: this.productBasket,
+      });
     },
-    decr() {
-      if (this.productBasket > 1) {
-        this.productBasket -= 1;
-      }
-    },
+    ...mapMutations(['addProduct']),
   },
   filters: {
     formatNumbers,
@@ -174,5 +163,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

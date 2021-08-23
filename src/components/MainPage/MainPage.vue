@@ -8,7 +8,7 @@
       <ProductFilter :priceFrom.sync="filterPriceFrom"
                      :priceTo.sync="filterPriceTo"
                      :categoryId.sync="filtercategoryId"
-                     :Allcategory.sync="getcategory"
+                     :Allcategory.sync="category"
                      :color.sync="filteredColor" />
       <section class="catalog">
 
@@ -24,10 +24,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ProductList from './ChoiseProductPage/ProductList/ProductList.vue';
 import Pagination from './ChoiseProductPage/Pagination/Pagination.vue';
 import ProductFilter from './ChoiseProductPage/ProductFilter/ProductFilter.vue';
-import state from '../../state/state';
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     filteredProducts() {
-      let filteredProduct = state.products;
+      let filteredProduct = this.getProductList;
 
       if (this.filterPriceFrom > 0) {
         filteredProduct = filteredProduct.filter((el) => el.price >= this.filterPriceFrom);
@@ -72,9 +72,10 @@ export default {
     countProduct() {
       return this.filteredProducts.length;
     },
-    getcategory() {
-      return state.categories;
-    },
+    ...mapGetters({
+      category: 'getCategory',
+      getProductList: 'getProductList',
+    }),
   },
 };
 </script>
