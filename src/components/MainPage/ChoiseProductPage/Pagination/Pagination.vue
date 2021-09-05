@@ -32,28 +32,19 @@
   </ul>
 </template>
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
-  props: ['page', 'count', 'productPerPages'],
   methods: {
-    backPage() {
-      if (this.page > 1) {
-        this.$emit('update:page', this.page - 1);
-      }
-    },
-    nextPage() {
-      if (this.page < this.countPage) {
-        this.$emit('update:page', this.page + 1);
-      }
-    },
-    changePage(numberPage) {
-      this.$emit('update:page', numberPage);
-    },
+    ...mapMutations(['backPage', 'nextPage', 'changePage']),
   },
   computed: {
-    countPage() {
-      return Math.ceil((this.count / this.productPerPages));
-    },
+    ...mapGetters({
+      page: 'getNumberPage',
+      limitProduct: 'getLimitProduct',
+      countProduct: 'getCountProducts',
+      countPage: 'countPage',
+    }),
   },
 };
 </script>

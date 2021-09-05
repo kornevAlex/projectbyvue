@@ -25,7 +25,7 @@
     <section class="cart">
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
-          <ul class="cart__list">
+          <ul v-if="productList.length > 0" class="cart__list">
              <CartItem v-for="product of productList" :key="product.id" :product="product" />
           </ul>
         </div>
@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      productList: 'getProductsInCart',
+      productList: 'getProductInCart',
       allIn: 'getTotalCost',
       countProductInCart: 'getCountProduct',
     }),

@@ -1,7 +1,7 @@
 <template>
   <li class='cart__item product'>
     <div class='product__pic'>
-      <img :src='product.img' width='120' height='120' alt='Название товара' />
+      <img :src='product.image.file.url' width='120' height='120' alt='Название товара' />
     </div>
     <h3 class='product__title'>
       {{ product.title }}
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import formatNumbers from '@/utils/formatNumber';
 
 export default {
@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      productList: 'getProductsInCart',
+      productList: 'getProductInCart',
       allIn: 'getTotalCost',
       countProductInCart: 'getCountProduct',
     }),
@@ -64,23 +64,23 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['updateCountProduct', 'deleteProductInCart']),
+    ...mapActions(['updateProductCart', 'deleteProductInBasket']),
     inc() {
-      this.updateCountProduct({
+      this.updateProductCart({
         count: this.product.count + 1,
         id: this.product.id,
       });
     },
     decr() {
       if (this.product.count > 1) {
-        this.updateCountProduct({
+        this.updateProductCart({
           count: this.product.count - 1,
           id: this.product.id,
         });
       }
     },
     deleteProduct() {
-      this.deleteProductInCart(this.product.id);
+      this.deleteProductInBasket(this.product.id);
     },
   },
 };

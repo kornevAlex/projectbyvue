@@ -103,11 +103,23 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex';
 import Header from './components/Header/Header.vue';
 
 export default {
   components: {
     Header,
+  },
+  created() {
+    const accessKey = localStorage.getItem('userAccessKey');
+    if (accessKey) {
+      this.setUserAccessKey(accessKey);
+    }
+    this.loadCart();
+  },
+  methods: {
+    ...mapActions(['loadCart']),
+    ...mapMutations(['setUserAccessKey']),
   },
 };
 </script>

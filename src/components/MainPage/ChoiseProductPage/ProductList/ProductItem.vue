@@ -3,7 +3,7 @@
       <router-link class="catalog__pic"
       :to="{name: 'product', params: {id: product.id, categoryId: product.categoryId }}" >
         <img
-          :src="product.img"
+          :src="product.image.file.url"
           alt="Название товара"
         />
       </router-link>
@@ -17,39 +17,15 @@
       <span class="catalog__price"> {{ product.price | formatNumbers}} ₽ </span>
 
       <ul class="colors colors--black">
-        <li class="colors__item">
+        <li class="colors__item" v-for="(colorItem, i) of product.colors" :key="i">
           <label class="colors__label">
             <input
               class="colors__radio sr-only"
               type="radio"
-              value="#73B6EA"
-              v-model="color"
+              :value="colorItem.code"
             />
-            <span class="colors__value" style="background-color: #73b6ea">
+            <span class="colors__value" :style="`background-color: ${colorItem.code}`">
             </span>
-          </label>
-        </li>
-        <li class="colors__item">
-          <label class="colors__label">
-            <input
-              class="colors__radio sr-only"
-              type="radio"
-              value="#8BE000"
-              v-model="color"
-            />
-            <span class="colors__value" style="background-color: #8be000">
-            </span>
-          </label>
-        </li>
-        <li class="colors__item">
-          <label class="colors__label">
-            <input
-              class="colors__radio sr-only"
-              type="radio"
-              value="#222"
-              v-model="color"
-            />
-            <span class="colors__value" style="background-color: #222"> </span>
           </label>
         </li>
       </ul>
@@ -60,11 +36,6 @@ import formatNumbers from '@/utils/formatNumber';
 
 export default {
   props: ['product'],
-  data() {
-    return {
-      color: '#73B6EA',
-    };
-  },
   filters: {
     formatNumbers,
   },

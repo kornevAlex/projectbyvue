@@ -37,13 +37,11 @@
             class='form__select'
             type='text'
             name='category'
-            v-model.number='currentCategory'
-          >
+            v-model='currentCategory'>
             <option
-              v-for='category of Allcategory'
+              v-for='category of category'
               :key='category.id'
-              :value='category.id'
-            >
+              :value='category.id'>
               {{ category.title }}
             </option>
           </select>
@@ -53,15 +51,15 @@
       <fieldset class='form__block'>
         <legend class='form__legend'>Цвет</legend>
         <ul class='colors'>
-          <li class='colors__item' v-for="(color, i) of colorList" :key="i">
+          <li class='colors__item' v-for="({code, title, id}) of colorList" :key="id">
             <label class='colors__label'>
               <input
                 class='colors__radio sr-only'
                 type='radio'
-                name='color'
+                :name="title"
                 v-model="currentColor"
-                :value="color" />
-              <span class='colors__value' :style="`background-color: ${color}`"> </span
+                :value="id" />
+              <span class='colors__value' :style="`background-color: ${code}`"> </span
             ></label>
           </li>
         </ul>
@@ -77,49 +75,54 @@
   </aside>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
-  props: ['priceFrom', 'priceTo', 'categoryId', 'Allcategory', 'color'],
   data() {
     return {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentCategory: 0,
-      currentColor: '#73B6EA',
+      currentColor: 0,
     };
   },
   watch: {
-    priceFrom(val) {
-      this.currentPriceFrom = val;
+    currentPriceFrom(val) {
+      this.changeMinPrice(val);
     },
-    priceTo(val) {
-      this.currentPriceTo = val;
+    currentPriceTo(val) {
+      this.changeMaxPrice(val);
     },
-    categoryId(val) {
-      this.currentCategory = val;
+    currentCategory(val) {
+      this.changeCategories(val);
     },
-    color(val) {
-      this.currentColor = val;
+    currentColor(val) {
+      this.changeColorId(val);
     },
   },
   methods: {
     submit() {
-      this.$emit('update:priceFrom', this.currentPriceFrom);
-      this.$emit('update:priceTo', this.currentPriceTo);
-      this.$emit('update:categoryId', this.currentCategory);
-      this.$emit('update:color', this.currentColor);
+      this.loadProducts();
     },
     reset() {
-      this.$emit('update:priceFrom', 0);
-      this.$emit('update:priceTo', 0);
-      this.$emit('update:categoryId', 0);
-      this.$emit('update:color', 0);
+      const [one] = this.category;
+      this.currentPriceFrom = 0;
+      this.currentPriceTo = 0;
+      this.currentCategory = one.id;
+      this.currentColor = 0;
+      this.loadProducts();
     },
+    ...mapActions(['loadProducts']),
+    ...mapMutations(['changeMinPrice', 'changeMaxPrice', 'changeCategories', 'changeColorId']),
   },
   computed: {
     ...mapGetters({
+      category: 'getCategory',
       colorList: 'getColorList',
+      priceFrom: 'getPriceFrom',
+      priceTo: 'getPriceTo',
+      categoryId: 'getCategoriesId',
+      color: 'getColorId',
     }),
   },
 };
