@@ -7,8 +7,18 @@ export default {
     errorBasket: false,
     productBasket: [],
     userAccessKey: null,
+    orderInfo: null,
   },
   actions: {
+    loadOrderInfo({ state, commit }, orderId) {
+      return axios.get(`${API_BASE_URL}/api/orders/${orderId}`, {
+        params: {
+          userAccessKey: state.userAccessKey,
+        },
+      }).then(resp => {
+        commit('updateOrderInfo', resp.data);
+      });
+    },
     loadCart({ state, commit }) {
       state.loadBasket = true;
       state.errorBasket = false;
@@ -68,6 +78,12 @@ export default {
     },
   },
   mutations: {
+    updateOrderInfo(state, order) {
+      state.orderInfo = order;
+    },
+    resetBasket(state) {
+      state.productBasket = [];
+    },
     setBasket(state, basket) {
       state.productBasket = basket.map(product => ({
         idInCart: product.id,
@@ -92,8 +108,8 @@ export default {
     },
   },
   getters: {
-    getProductInCart(state) {
-      return state.productBasket;
+    getProductInCart({ productBasket }) {
+      return productBasket;
     },
     getTotalCost(state) {
       const arr = state.productBasket;
@@ -111,6 +127,12 @@ export default {
     },
     getErrorLoadBasket({ errorBasket }) {
       return errorBasket;
+    },
+    getUserAccessKey({ userAccessKey }) {
+      return userAccessKey;
+    },
+    getOrderInfo({ orderInfo }) {
+      return orderInfo;
     },
   },
 };
