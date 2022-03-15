@@ -1,4 +1,5 @@
-# projectbyskillbox
+# projectbyvue
+# preview: https://kornevalex.github.io/vue-app/#/
 
 ## Project setup
 ```
